@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="custom-background">
     <div class="pokemon-list">
       <div class="search-bar">
         <input
@@ -31,6 +31,7 @@
           v-for="(pokemon, index) in filteredPokemons"
           :key="index"
           class="pokemon-card"
+          @click="viewPokemonDetails(pokemon.id)"
         >
           <!-- Linha 1: Imagem -->
           <div class="row">
@@ -92,9 +93,6 @@ export default defineComponent({
             (ability: any) => ability.ability.name
           )
 
-          console.log('Abilities for', detailsData.name, ':', abilities)
-
-          // Filtrar habilidades para aquelas que têm um ícone associado
           const validAbilities = abilities.filter((ability) =>
             Object.prototype.hasOwnProperty.call(abilityIconsMap, ability)
           )
@@ -138,6 +136,10 @@ export default defineComponent({
       searchTerm.value = ''
     }
 
+    function viewPokemonDetails(id: number) {
+      window.location.assign(`/pokemon/${id}`);
+    }
+
     return {
       pokemons,
       isLoading,
@@ -145,17 +147,21 @@ export default defineComponent({
       filteredPokemons,
       clearSearch,
       showClearButton,
+      viewPokemonDetails
     }
   },
 })
 </script>
 
 <style scoped>
+.custom-background {
+  background-color: #f1f4f5;
+}
+
 .pokemon-list {
   text-align: center;
   background-color: #F1F4F5;
   margin: auto;
-  padding: 20px;
 }
 
 #app {
@@ -194,6 +200,7 @@ export default defineComponent({
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  max-width: 1150px;
 }
 
 .pokemon-card {
@@ -205,6 +212,7 @@ export default defineComponent({
   max-width: 180px;
   height: 230px;
   background-color: #fff;
+  cursor: pointer;
 }
 
 .pokemon-image {
